@@ -22,10 +22,11 @@ Your Render deployment was failing because:
 #### 2. Enhanced Build Scripts
 ```json
 "scripts": {
-  "prebuild": "rm -rf dist",           // ← Clean dist before build
-  "build": "tsc",                      // ← Compile TypeScript
+  "postinstall": "npm run build",     // ← Auto-build after install
+  "prebuild": "rm -rf dist",          // ← Clean dist before build
+  "build": "tsc",                     // ← Compile TypeScript
   "postbuild": "echo 'Build completed successfully. Checking dist directory...' && ls -la dist/", // ← Verify build
-  "start": "node dist/index.js"       // ← Run compiled JS
+  "start": "node dist/index.js"      // ← Run compiled JS
 }
 ```
 
@@ -35,21 +36,35 @@ services:
   - type: web
     name: mindsupport-api
     env: node
-    buildCommand: yarn install && yarn build  # ← Ensure build runs
-    startCommand: node dist/index.js         # ← Direct JS execution
+    buildCommand: yarn install              # ← Simplified build command
+    startCommand: node dist/index.js        # ← Direct JS execution
 ```
 
-#### 4. Added Node.js Version Control
-**Created .nvmrc file:**
+#### 4. Updated Node.js Version
+**Updated .nvmrc file:**
 ```
-18.19.0
+20.18.0
 ```
+**Reason:** Node.js 18.19.0 reached end-of-life. Updated to maintained version.
+
+### 🔧 **Critical Fix: postinstall Hook**
+
+The main issue was that Render was only running `yarn install` and ignoring the `buildCommand` in render.yaml. 
+
+**Solution:** Added `postinstall` script that automatically runs `npm run build` after dependencies are installed.
+
+```json
+"postinstall": "npm run build"
+```
+
+This ensures TypeScript compilation happens automatically after `yarn install` completes.
 
 ### 🧪 Local Testing Results
 ✅ **Build Process Working:**
 ```bash
-npm run build
+npm run postinstall
 # Output:
+# > postinstall: npm run build
 # > prebuild: rm -rf dist
 # > build: tsc  
 # > postbuild: Build completed successfully...
