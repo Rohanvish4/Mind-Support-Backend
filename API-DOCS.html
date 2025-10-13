@@ -1,0 +1,1091 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MindSupport API Documentation</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            padding: 20px;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.2);
+            overflow: hidden;
+        }
+        
+        header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 40px;
+            text-align: center;
+        }
+        
+        header h1 {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+        }
+        
+        header p {
+            font-size: 1.2em;
+            opacity: 0.9;
+        }
+        
+        nav {
+            background: #f8f9fa;
+            padding: 20px 40px;
+            border-bottom: 1px solid #dee2e6;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+        
+        nav ul {
+            list-style: none;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 20px;
+        }
+        
+        nav a {
+            color: #667eea;
+            text-decoration: none;
+            font-weight: 600;
+            transition: color 0.3s;
+        }
+        
+        nav a:hover {
+            color: #764ba2;
+        }
+        
+        .content {
+            padding: 40px;
+        }
+        
+        section {
+            margin-bottom: 60px;
+        }
+        
+        h2 {
+            color: #667eea;
+            font-size: 2em;
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 3px solid #667eea;
+        }
+        
+        h3 {
+            color: #764ba2;
+            font-size: 1.5em;
+            margin: 30px 0 15px 0;
+        }
+        
+        h4 {
+            color: #495057;
+            font-size: 1.2em;
+            margin: 20px 0 10px 0;
+        }
+        
+        .endpoint {
+            background: #f8f9fa;
+            border-left: 4px solid #667eea;
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 5px;
+        }
+        
+        .method {
+            display: inline-block;
+            padding: 5px 12px;
+            border-radius: 4px;
+            font-weight: bold;
+            font-size: 0.9em;
+            margin-right: 10px;
+        }
+        
+        .post { background: #28a745; color: white; }
+        .get { background: #007bff; color: white; }
+        .put { background: #ffc107; color: #333; }
+        .delete { background: #dc3545; color: white; }
+        
+        .endpoint-url {
+            font-family: 'Courier New', monospace;
+            background: #e9ecef;
+            padding: 8px 12px;
+            border-radius: 4px;
+            display: inline-block;
+            margin: 10px 0;
+        }
+        
+        pre {
+            background: #2d2d2d;
+            color: #f8f8f2;
+            padding: 20px;
+            border-radius: 5px;
+            overflow-x: auto;
+            margin: 15px 0;
+        }
+        
+        code {
+            font-family: 'Courier New', monospace;
+            font-size: 0.9em;
+        }
+        
+        .badge {
+            display: inline-block;
+            padding: 4px 10px;
+            border-radius: 12px;
+            font-size: 0.85em;
+            font-weight: 600;
+            margin-left: 10px;
+        }
+        
+        .badge-public { background: #28a745; color: white; }
+        .badge-private { background: #ffc107; color: #333; }
+        .badge-moderator { background: #dc3545; color: white; }
+        
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+        }
+        
+        th, td {
+            padding: 12px;
+            text-align: left;
+            border-bottom: 1px solid #dee2e6;
+        }
+        
+        th {
+            background: #667eea;
+            color: white;
+            font-weight: 600;
+        }
+        
+        tr:hover {
+            background: #f8f9fa;
+        }
+        
+        .postman-guide {
+            background: linear-gradient(135deg, #ff6b6b 0%, #ee5a6f 100%);
+            color: white;
+            padding: 30px;
+            border-radius: 10px;
+            margin: 30px 0;
+        }
+        
+        .postman-guide h3 {
+            color: white;
+            border-bottom: 2px solid white;
+            padding-bottom: 10px;
+        }
+        
+        .postman-step {
+            background: rgba(255,255,255,0.1);
+            padding: 15px;
+            border-radius: 5px;
+            margin: 15px 0;
+        }
+        
+        .note {
+            background: #fff3cd;
+            border-left: 4px solid #ffc107;
+            padding: 15px;
+            margin: 20px 0;
+            border-radius: 4px;
+        }
+        
+        .warning {
+            background: #f8d7da;
+            border-left: 4px solid #dc3545;
+            padding: 15px;
+            margin: 20px 0;
+            border-radius: 4px;
+        }
+        
+        .success {
+            background: #d4edda;
+            border-left: 4px solid #28a745;
+            padding: 15px;
+            margin: 20px 0;
+            border-radius: 4px;
+        }
+        
+        footer {
+            background: #2d3436;
+            color: white;
+            text-align: center;
+            padding: 30px;
+        }
+        
+        .use-case {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 20px;
+            border-radius: 8px;
+            margin: 20px 0;
+        }
+        
+        .use-case h4 {
+            color: white;
+            margin-top: 0;
+        }
+        
+        @media (max-width: 768px) {
+            .container {
+                margin: 10px;
+            }
+            
+            header h1 {
+                font-size: 1.8em;
+            }
+            
+            nav ul {
+                flex-direction: column;
+            }
+            
+            .content {
+                padding: 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>🧠 MindSupport API Documentation</h1>
+            <p>Complete Backend API for Mental Health Support Platform</p>
+            <p style="font-size: 0.9em; margin-top: 10px;">Version 1.0.0 | Node.js + Express + TypeScript + MongoDB + Stream Chat</p>
+        </header>
+
+        <nav>
+            <ul>
+                <li><a href="#overview">Overview</a></li>
+                <li><a href="#authentication">Authentication</a></li>
+                <li><a href="#stream">Stream Chat</a></li>
+                <li><a href="#moderation">Moderation</a></li>
+                <li><a href="#webhooks">Webhooks</a></li>
+                <li><a href="#tips">Daily Tips</a></li>
+                <li><a href="#health">Health Check</a></li>
+                <li><a href="#postman">Postman Guide</a></li>
+                <li><a href="#usecases">Use Cases</a></li>
+            </ul>
+        </nav>
+
+        <div class="content">
+            <!-- OVERVIEW -->
+            <section id="overview">
+                <h2>📚 Overview</h2>
+                <p>Welcome to the MindSupport API documentation. This API provides secure endpoints for a mental health support platform with peer counseling, real-time chat, and advanced content moderation.</p>
+                
+                <h3>Base URL</h3>
+                <pre><code>Development: http://localhost:3000
+Production:  https://your-domain.com</code></pre>
+
+                <h3>Key Features</h3>
+                <ul style="margin-left: 20px; line-height: 2;">
+                    <li>✅ JWT-based authentication with refresh tokens (15min access, 7 day refresh)</li>
+                    <li>✅ Stream Chat integration for real-time messaging</li>
+                    <li>✅ Anonymous/ephemeral user identities (24-hour expiry)</li>
+                    <li>✅ Automated content moderation with keyword scanning</li>
+                    <li>✅ Crisis detection and resource delivery</li>
+                    <li>✅ Reporting and moderation queue system</li>
+                    <li>✅ Rate limiting (5 requests per 15 minutes for auth)</li>
+                    <li>✅ Daily mental health tips system</li>
+                    <li>✅ MongoDB Atlas cloud database</li>
+                    <li>✅ Production-ready security measures</li>
+                </ul>
+
+                <div class="success">
+                    <strong>✅ Backend Status:</strong> All endpoints tested and validated. TypeScript compilation successful. MongoDB Atlas connected. Stream Chat integration working.
+                </div>
+
+                <div class="warning">
+                    <strong>⚠️ Security Notice:</strong> Never expose API secrets, JWT tokens, or Stream API secrets in client-side code. Always use HTTPS in production.
+                </div>
+            </section>
+
+            <!-- AUTHENTICATION -->
+            <section id="authentication">
+                <h2>🔐 Authentication</h2>
+                <p>MindSupport uses JWT (JSON Web Tokens) for authentication. Access tokens expire in 15 minutes, refresh tokens in 7 days.</p>
+
+                <h3>Register New User</h3>
+                <div class="endpoint">
+                    <span class="method post">POST</span>
+                    <span class="endpoint-url">/api/auth/register</span>
+                    <span class="badge badge-public">Public</span>
+                    
+                    <h4>Request Body:</h4>
+                    <pre><code>{
+  "email": "user@example.com",
+  "password": "SecurePassword123!",
+  "displayName": "John Doe"
+}</code></pre>
+
+                    <h4>Response (201 Created):</h4>
+                    <pre><code>{
+  "success": true,
+  "data": {
+    "user": {
+      "id": "64f1234567890abcdef12345",
+      "displayName": "John Doe",
+      "email": "user@example.com",
+      "role": "user"
+    },
+    "accessToken": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...",
+    "refreshToken": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."
+  },
+  "meta": {
+    "timestamp": "2025-10-13T16:08:48.000Z"
+  }
+}</code></pre>
+                </div>
+
+                <h3>Login User</h3>
+                <div class="endpoint">
+                    <span class="method post">POST</span>
+                    <span class="endpoint-url">/api/auth/login</span>
+                    <span class="badge badge-public">Public</span>
+                    
+                    <h4>Request Body:</h4>
+                    <pre><code>{
+  "email": "user@example.com",
+  "password": "SecurePassword123!"
+}</code></pre>
+
+                    <h4>Response (200 OK):</h4>
+                    <pre><code>{
+  "success": true,
+  "data": {
+    "user": {
+      "id": "64f1234567890abcdef12345",
+      "displayName": "John Doe",
+      "email": "user@example.com",
+      "role": "user"
+    },
+    "accessToken": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...",
+    "refreshToken": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."
+  }
+}</code></pre>
+                </div>
+
+                <h3>Refresh Access Token</h3>
+                <div class="endpoint">
+                    <span class="method post">POST</span>
+                    <span class="endpoint-url">/api/auth/refresh</span>
+                    <span class="badge badge-public">Public</span>
+                    
+                    <h4>Request Body:</h4>
+                    <pre><code>{
+  "refreshToken": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."
+}</code></pre>
+
+                    <h4>Response (200 OK):</h4>
+                    <pre><code>{
+  "success": true,
+  "data": {
+    "accessToken": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."
+  }
+}</code></pre>
+                </div>
+
+                <h3>Get Current User Profile</h3>
+                <div class="endpoint">
+                    <span class="method get">GET</span>
+                    <span class="endpoint-url">/api/auth/me</span>
+                    <span class="badge badge-private">Private</span>
+                    
+                    <h4>Headers:</h4>
+                    <pre><code>Authorization: Bearer &lt;accessToken&gt;</code></pre>
+
+                    <h4>Response (200 OK):</h4>
+                    <pre><code>{
+  "success": true,
+  "data": {
+    "user": {
+      "id": "68ed34e8c930a37de540ee89",
+      "displayName": "Stream Test User",
+      "email": "streamtest@example.com",
+      "role": "user",
+      "isCounselor": false,
+      "tags": [],
+      "isBanned": false,
+      "createdAt": "2025-10-13T17:07:46.474Z",
+      "lastSeenAt": "2025-10-13T17:24:11.382Z"
+    }
+  },
+  "meta": {
+    "timestamp": "2025-10-13T17:24:11.382Z"
+  }
+}</code></pre>
+                </div>
+
+                <div class="note">
+                    <strong>💡 Note:</strong> For protected endpoints, include the access token in the Authorization header: <code>Authorization: Bearer &lt;accessToken&gt;</code>
+                </div>
+
+                <div class="note">
+                    <strong>🔄 Rate Limiting:</strong> Authentication endpoints are rate limited to 5 requests per 15 minutes per IP address.
+                </div>
+            </section>
+
+            <!-- HEALTH CHECK -->
+            <section id="health">
+                <h2>🏥 Health Check</h2>
+                <p>Monitor server health and status.</p>
+
+                <h3>Health Check</h3>
+                <div class="endpoint">
+                    <span class="method get">GET</span>
+                    <span class="endpoint-url">/health</span>
+                    <span class="badge badge-public">Public</span>
+                    
+                    <h4>Response (200 OK):</h4>
+                    <pre><code>{
+  "status": "healthy",
+  "timestamp": "2025-10-13T17:25:49.935Z",
+  "uptime": 278.000140051,
+  "environment": "development"
+}</code></pre>
+
+                    <div class="success">
+                        <strong>✅ Server Status:</strong> Use this endpoint to verify the server is running and responsive.
+                    </div>
+                </div>
+            </section>
+
+            <!-- STREAM CHAT -->
+            <section id="stream">
+                <h2>💬 Stream Chat Integration</h2>
+                <p>Server-side Stream Chat operations including user management, token generation, and channel operations.</p>
+
+                <h3>Get Stream Token</h3>
+                <div class="endpoint">
+                    <span class="method post">POST</span>
+                    <span class="endpoint-url">/api/stream/token</span>
+                    <span class="badge badge-private">Private</span>
+                    
+                    <h4>Headers:</h4>
+                    <pre><code>Authorization: Bearer &lt;accessToken&gt;</code></pre>
+
+                    <h4>Request Body (Optional):</h4>
+                    <pre><code>{
+  "anonymousHandle": "Anonymous Helper"  // Optional for ephemeral identity
+}</code></pre>
+
+                    <h4>Response (200 OK):</h4>
+                    <pre><code>{
+  "success": true,
+  "data": {
+    "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...",
+    "user": {
+      "id": "68ed34e8c930a37de540ee89",
+      "displayName": "John Doe",
+      "avatarUrl": null
+    }
+  },
+  "meta": {
+    "timestamp": "2025-10-13T17:24:11.382Z"
+  }
+}</code></pre>
+
+                    <h4>Response with Anonymous (200 OK):</h4>
+                    <pre><code>{
+  "success": true,
+  "data": {
+    "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...",
+    "user": {
+      "id": "anon_68ed34e8_x7k9p2q1",
+      "displayName": "Anonymous Helper",
+      "avatarUrl": null
+    },
+    "ephemeral": {
+      "id": "anon_68ed34e8_x7k9p2q1",
+      "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...",
+      "handle": "Anonymous Helper",
+      "expiresAt": "2025-10-14T17:24:11.382Z"
+    }
+  },
+  "meta": {
+    "timestamp": "2025-10-13T17:24:11.382Z"
+  }
+}</code></pre>
+                </div>
+
+                <h3>Create Anonymous Handle</h3>
+                <div class="endpoint">
+                    <span class="method post">POST</span>
+                    <span class="endpoint-url">/api/stream/anonymous-handle</span>
+                    <span class="badge badge-public">Public</span>
+                    
+                    <h4>Request Body:</h4>
+                    <pre><code>{
+  "anonymousHandle": "Helpful Friend"
+}</code></pre>
+
+                    <h4>Response (200 OK):</h4>
+                    <pre><code>{
+  "success": true,
+  "data": {
+    "ephemeralId": "anon_guest_k8x2q9p5",
+    "handle": "Helpful Friend",
+    "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...",
+    "expiresAt": "2025-10-14T17:24:11.382Z"
+  },
+  "meta": {
+    "timestamp": "2025-10-13T17:24:11.382Z"
+  }
+}</code></pre>
+                </div>
+
+                <h3>Create Channel</h3>
+                <div class="endpoint">
+                    <span class="method post">POST</span>
+                    <span class="endpoint-url">/api/stream/createChannel</span>
+                    <span class="badge badge-private">Private</span>
+                    
+                    <h4>Headers:</h4>
+                    <pre><code>Authorization: Bearer &lt;accessToken&gt;</code></pre>
+                    
+                    <h4>Request Body:</h4>
+                    <pre><code>{
+  "channelId": "support-room-1",  // Optional, auto-generated if not provided
+  "type": "messaging",             // "messaging" or "team"
+  "members": ["68ed34e8c930a37de540ee89"],
+  "extra": {
+    "title": "Support Group Alpha",
+    "tags": ["anxiety", "support"],
+    "isPrivate": false
+  }
+}</code></pre>
+
+                    <h4>Response (201 Created):</h4>
+                    <pre><code>{
+  "success": true,
+  "data": {
+    "channelId": "RIy5vhfe1GntI_Iz",
+    "streamChannelId": "messaging:RIy5vhfe1GntI_Iz",
+    "members": ["68ed34e8c930a37de540ee89"],
+    "title": "Support Group Alpha"
+  },
+  "meta": {
+    "timestamp": "2025-10-13T17:24:11.382Z"
+  }
+}</code></pre>
+                </div>
+
+                <h3>Join Channel</h3>
+                <div class="endpoint">
+                    <span class="method post">POST</span>
+                    <span class="endpoint-url">/api/stream/joinChannel</span>
+                    <span class="badge badge-private">Private</span>
+                    
+                    <h4>Headers:</h4>
+                    <pre><code>Authorization: Bearer &lt;accessToken&gt;</code></pre>
+                    
+                    <h4>Request Body:</h4>
+                    <pre><code>{
+  "streamChannelId": "messaging:RIy5vhfe1GntI_Iz"
+}</code></pre>
+
+                    <h4>Response (200 OK):</h4>
+                    <pre><code>{
+  "success": true,
+  "data": {
+    "channelId": "messaging:RIy5vhfe1GntI_Iz",
+    "userId": "68ed34e8c930a37de540ee89"
+  },
+  "meta": {
+    "timestamp": "2025-10-13T17:24:11.382Z"
+  }
+}</code></pre>
+                </div>
+            </section>
+
+            <!-- MODERATION -->
+            <section id="moderation">
+                <h2>🛡️ Reporting & Moderation</h2>
+                <p>Report content, manage moderation queue, and resolve reports.</p>
+
+                <h3>Submit Report</h3>
+                <div class="endpoint">
+                    <span class="method post">POST</span>
+                    <span class="endpoint-url">/api/report/submit</span>
+                    <span class="badge badge-public">Public</span>
+                    
+                    <h4>Request Body:</h4>
+                    <pre><code>{
+  "targetType": "message",  // "message" | "user" | "channel" | "resource"
+  "targetId": "msg-abc123",
+  "reason": "This message contains inappropriate content that violates community guidelines."
+}</code></pre>
+
+                    <h4>Response (201 Created):</h4>
+                    <pre><code>{
+  "success": true,
+  "data": {
+    "reportId": "68ed34f9c930a37de540eea1",
+    "status": "open"
+  },
+  "meta": {
+    "timestamp": "2025-10-13T17:24:11.382Z"
+  }
+}</code></pre>
+                </div>
+
+                <h3>Get Reports (Moderator Only)</h3>
+                <div class="endpoint">
+                    <span class="method get">GET</span>
+                    <span class="endpoint-url">/api/report?page=1&limit=20&status=open</span>
+                    <span class="badge badge-moderator">Moderator</span>
+                    
+                    <h4>Headers:</h4>
+                    <pre><code>Authorization: Bearer &lt;moderatorAccessToken&gt;</code></pre>
+                    
+                    <h4>Query Parameters:</h4>
+                    <table>
+                        <tr>
+                            <th>Parameter</th>
+                            <th>Type</th>
+                            <th>Description</th>
+                        </tr>
+                        <tr>
+                            <td>page</td>
+                            <td>number</td>
+                            <td>Page number (default: 1)</td>
+                        </tr>
+                        <tr>
+                            <td>limit</td>
+                            <td>number</td>
+                            <td>Items per page (default: 20)</td>
+                        </tr>
+                        <tr>
+                            <td>status</td>
+                            <td>string</td>
+                            <td>Filter by status: open, under_review, resolved</td>
+                        </tr>
+                        <tr>
+                            <td>targetType</td>
+                            <td>string</td>
+                            <td>Filter by target type</td>
+                        </tr>
+                    </table>
+
+                    <div class="warning">
+                        <strong>⚠️ Access Control:</strong> This endpoint returns <code>403 Forbidden</code> for regular users. Requires moderator or admin role.
+                    </div>
+                </div>
+
+                <h3>Resolve Moderation Action (Moderator Only)</h3>
+                <div class="endpoint">
+                    <span class="method post">POST</span>
+                    <span class="endpoint-url">/api/moderation/resolve</span>
+                    <span class="badge badge-moderator">Moderator</span>
+                    
+                    <h4>Request Body:</h4>
+                    <pre><code>{
+  "reportId": "64f9876543210fedcba98765",
+  "action": "remove",  // "dismiss" | "remove" | "banUser" | "suspendChannel"
+  "comment": "Content removed for violating community guidelines.",
+  "banDurationHours": 168  // Optional, for banUser action (7 days)
+}</code></pre>
+
+                    <h4>Response (200 OK):</h4>
+                    <pre><code>{
+  "success": true,
+  "data": {
+    "reportId": "64f9876543210fedcba98765",
+    "action": "remove",
+    "status": "resolved",
+    "details": {
+      "messageDeleted": true
+    }
+  }
+}</code></pre>
+                </div>
+
+                <h3>Get Moderation Queue (Moderator Only)</h3>
+                <div class="endpoint">
+                    <span class="method get">GET</span>
+                    <span class="endpoint-url">/api/moderation/queue?page=1&processed=false</span>
+                    <span class="badge badge-moderator">Moderator</span>
+                    
+                    <h4>Headers:</h4>
+                    <pre><code>Authorization: Bearer &lt;moderatorAccessToken&gt;</code></pre>
+
+                    <h4>Response (403 Forbidden for regular users):</h4>
+                    <pre><code>{
+  "success": false,
+  "error": {
+    "code": "FORBIDDEN",
+    "message": "Insufficient permissions",
+    "details": {
+      "required": ["moderator", "admin"],
+      "current": "user"
+    }
+  }
+}</code></pre>
+                </div>
+            </section>
+
+            <!-- WEBHOOKS -->
+            <section id="webhooks">
+                <h2>🔗 Webhooks</h2>
+                <p>Handle Stream Chat webhook events for real-time moderation.</p>
+
+                <h3>Stream Webhook Handler</h3>
+                <div class="endpoint">
+                    <span class="method post">POST</span>
+                    <span class="endpoint-url">/api/webhook/stream</span>
+                    <span class="badge badge-public">Signature Required</span>
+                    
+                    <h4>Headers:</h4>
+                    <pre><code>x-signature: &lt;stream-webhook-signature&gt;</code></pre>
+
+                    <h4>Event Types Handled:</h4>
+                    <ul style="margin-left: 20px;">
+                        <li><strong>message.new</strong> - Automatic content moderation and keyword scanning</li>
+                    </ul>
+
+                    <div class="warning">
+                        <strong>⚠️ Important:</strong> Configure this webhook URL in your Stream Chat dashboard. The signature is automatically verified using your STREAM_API_SECRET.
+                    </div>
+
+                    <h4>Moderation Flow:</h4>
+                    <ol style="margin-left: 20px; line-height: 2;">
+                        <li>Message received from Stream webhook</li>
+                        <li>Verify signature</li>
+                        <li>Check idempotency (prevent duplicate processing)</li>
+                        <li>Scan message text with keyword scanner</li>
+                        <li><strong>High Severity:</strong> Delete message, notify moderators, send crisis resources</li>
+                        <li><strong>Medium Severity:</strong> Flag message, add to moderation queue</li>
+                        <li><strong>Low Severity:</strong> Add to review queue</li>
+                        <li>Update metrics and audit logs</li>
+                    </ol>
+                </div>
+            </section>
+
+            <!-- DAILY TIPS -->
+            <section id="tips">
+                <h2>💡 Daily Tips</h2>
+                <p>Publish and retrieve daily mental health tips.</p>
+
+                <h3>Get Daily Tips</h3>
+                <div class="endpoint">
+                    <span class="method get">GET</span>
+                    <span class="endpoint-url">/api/tips?page=1&limit=30</span>
+                    <span class="badge badge-public">Public</span>
+                    
+                    <h4>Query Parameters:</h4>
+                    <table>
+                        <tr>
+                            <th>Parameter</th>
+                            <th>Type</th>
+                            <th>Description</th>
+                        </tr>
+                        <tr>
+                            <td>page</td>
+                            <td>number</td>
+                            <td>Page number (default: 1)</td>
+                        </tr>
+                        <tr>
+                            <td>limit</td>
+                            <td>number</td>
+                            <td>Items per page (default: 30)</td>
+                        </tr>
+                    </table>
+
+                    <h4>Response (200 OK):</h4>
+                    <pre><code>{
+  "success": true,
+  "data": {
+    "items": [
+      {
+        "_id": "68ed31e2c930a37de540ee72",
+        "id": "20251013",
+        "content": "Take a moment to breathe deeply and appreciate this moment.",
+        "type": "text",
+        "publishedAt": "2025-10-13T17:07:46.474Z",
+        "publishedBy": "scheduled-job",
+        "__v": 0
+      }
+    ],
+    "pagination": {
+      "page": 1,
+      "limit": 30,
+      "total": 1,
+      "totalPages": 1,
+      "hasNext": false,
+      "hasPrev": false
+    }
+  },
+  "meta": {
+    "timestamp": "2025-10-13T17:26:15.951Z"
+  }
+}</code></pre>
+                </div>
+
+                <h3>Publish Daily Tip</h3>
+                <div class="endpoint">
+                    <span class="method post">POST</span>
+                    <span class="endpoint-url">/api/tips/publish</span>
+                    <span class="badge badge-moderator">Admin/Secret</span>
+                    
+                    <h4>Headers:</h4>
+                    <pre><code>Authorization: Bearer &lt;PUBLISH_SECRET or admin accessToken&gt;</code></pre>
+
+                    <h4>Request Body (Optional):</h4>
+                    <pre><code>{
+  "content": "Take 5 deep breaths. Inhale peace, exhale stress.",
+  "type": "text",  // "text" | "activity" | "image" | "video"
+  "scheduledFor": "2025-10-14T08:00:00Z"  // Optional
+}</code></pre>
+
+                    <h4>Response (200 OK):</h4>
+                    <pre><code>{
+  "success": true,
+  "data": {
+    "tip": {
+      "id": "20251013",
+      "content": "Take 5 deep breaths. Inhale peace, exhale stress.",
+      "type": "text",
+      "publishedAt": "2025-10-13T16:08:48.000Z",
+      "publishedBy": "scheduled-job"
+    }
+  },
+  "meta": {
+    "timestamp": "2025-10-13T17:26:15.951Z"
+  }
+}</code></pre>
+
+                    <div class="success">
+                        <strong>✅ Automated Publishing:</strong> Configure GitHub Actions cron job to automatically publish daily tips at 8:00 AM UTC. See <code>.github/workflows/daily-tip.yml</code>
+                    </div>
+                </div>
+            </section>
+
+            <!-- POSTMAN TESTING GUIDE -->
+            <section id="postman">
+                <div class="postman-guide">
+                    <h2>📮 Postman Testing Guide</h2>
+                    <p style="color: white;">Step-by-step guide to test all endpoints using Postman or curl.</p>
+
+                    <h3>Environment Setup</h3>
+                    <div class="postman-step">
+                        <h4>1. Start the Server</h4>
+                        <pre><code>cd /home/rohanvish4/Desktop/MindSupportBackend
+npm run dev</code></pre>
+                        <p>Server should start on <code>http://localhost:3000</code></p>
+                    </div>
+
+                    <div class="postman-step">
+                        <h4>2. Test Health Check</h4>
+                        <pre><code>curl -X GET http://localhost:3000/health</code></pre>
+                        <p>Expected: <code>{"status": "healthy", ...}</code></p>
+                    </div>
+
+                    <h3>Authentication Flow</h3>
+                    <div class="postman-step">
+                        <h4>3. Register New User</h4>
+                        <pre><code>curl -X POST http://localhost:3000/api/auth/register \
+  -H "Content-Type: application/json" \
+  -d '{
+    "email": "test@example.com",
+    "password": "SecurePassword123!",
+    "displayName": "Test User"
+  }'</code></pre>
+                        <p>Save the <code>accessToken</code> from response!</p>
+                    </div>
+
+                    <div class="postman-step">
+                        <h4>4. Login User</h4>
+                        <pre><code>curl -X POST http://localhost:3000/api/auth/login \
+  -H "Content-Type: application/json" \
+  -d '{
+    "email": "test@example.com",
+    "password": "SecurePassword123!"
+  }'</code></pre>
+                    </div>
+
+                    <div class="postman-step">
+                        <h4>5. Get User Profile</h4>
+                        <pre><code>curl -X GET http://localhost:3000/api/auth/me \
+  -H "Authorization: Bearer YOUR_ACCESS_TOKEN"</code></pre>
+                    </div>
+
+                    <h3>Stream Chat Testing</h3>
+                    <div class="postman-step">
+                        <h4>6. Get Stream Token</h4>
+                        <pre><code>curl -X POST http://localhost:3000/api/stream/token \
+  -H "Content-Type: application/json" \
+  -H "Authorization: Bearer YOUR_ACCESS_TOKEN" \
+  -d '{}'</code></pre>
+                    </div>
+
+                    <div class="postman-step">
+                        <h4>7. Create Anonymous Handle</h4>
+                        <pre><code>curl -X POST http://localhost:3000/api/stream/anonymous-handle \
+  -H "Content-Type: application/json" \
+  -d '{"anonymousHandle": "Helpful Friend"}'</code></pre>
+                    </div>
+
+                    <div class="postman-step">
+                        <h4>8. Create Channel</h4>
+                        <pre><code>curl -X POST http://localhost:3000/api/stream/createChannel \
+  -H "Content-Type: application/json" \
+  -H "Authorization: Bearer YOUR_ACCESS_TOKEN" \
+  -d '{
+    "type": "messaging",
+    "members": ["YOUR_USER_ID"],
+    "extra": {
+      "title": "Test Support Room",
+      "tags": ["test"],
+      "isPrivate": false
+    }
+  }'</code></pre>
+                        <p>Save the <code>streamChannelId</code> from response!</p>
+                    </div>
+
+                    <div class="postman-step">
+                        <h4>9. Join Channel</h4>
+                        <pre><code>curl -X POST http://localhost:3000/api/stream/joinChannel \
+  -H "Content-Type: application/json" \
+  -H "Authorization: Bearer YOUR_ACCESS_TOKEN" \
+  -d '{"streamChannelId": "messaging:YOUR_CHANNEL_ID"}'</code></pre>
+                    </div>
+
+                    <h3>Content & Moderation</h3>
+                    <div class="postman-step">
+                        <h4>10. Get Daily Tips</h4>
+                        <pre><code>curl -X GET http://localhost:3000/api/tips</code></pre>
+                    </div>
+
+                    <div class="postman-step">
+                        <h4>11. Submit Report</h4>
+                        <pre><code>curl -X POST http://localhost:3000/api/report/submit \
+  -H "Content-Type: application/json" \
+  -d '{
+    "targetType": "message",
+    "targetId": "test-message-123",
+    "reason": "Testing report submission"
+  }'</code></pre>
+                    </div>
+
+                    <div class="postman-step">
+                        <h4>12. Test Moderation Queue (Should Fail for Regular Users)</h4>
+                        <pre><code>curl -X GET http://localhost:3000/api/moderation/queue \
+  -H "Authorization: Bearer YOUR_ACCESS_TOKEN"</code></pre>
+                        <p>Expected: <code>403 Forbidden - Insufficient permissions</code></p>
+                    </div>
+
+                    <h3>Rate Limiting Test</h3>
+                    <div class="postman-step">
+                        <h4>13. Test Rate Limiting</h4>
+                        <p>Make 6 rapid login attempts to trigger rate limiting:</p>
+                        <pre><code># Run this 6 times rapidly
+for i in {1..6}; do
+  curl -X POST http://localhost:3000/api/auth/login \
+    -H "Content-Type: application/json" \
+    -d '{"email": "test@example.com", "password": "wrong"}'
+  echo "Attempt $i"
+done</code></pre>
+                        <p>After 5 attempts, you should get <code>429 Too Many Requests</code></p>
+                    </div>
+
+                    <div class="warning" style="background: rgba(248, 215, 218, 0.2); border-left: 4px solid #dc3545;">
+                        <strong>⚠️ Important Notes:</strong>
+                        <ul style="margin: 10px 0 0 20px; color: white;">
+                            <li>Replace <code>YOUR_ACCESS_TOKEN</code> with actual token from login/register response</li>
+                            <li>Replace <code>YOUR_USER_ID</code> with actual user ID from auth response</li>
+                            <li>Replace <code>YOUR_CHANNEL_ID</code> with actual channel ID from create channel response</li>
+                            <li>Rate limiting resets after 15 minutes</li>
+                        </ul>
+                    </div>
+                </div>
+            </section>
+
+            <!-- USE CASES -->
+            <section id="usecases">
+                <h2>💼 Use Cases & Examples</h2>
+                
+                <div class="use-case">
+                    <h4>🔐 User Registration & Authentication Flow</h4>
+                    <p>Complete flow for new user onboarding with JWT token management.</p>
+                    <ol style="margin-left: 20px;">
+                        <li>User registers with email/password → Get access & refresh tokens</li>
+                        <li>Use access token for protected endpoints</li>
+                        <li>Refresh token when access token expires (15 minutes)</li>
+                        <li>Store tokens securely in mobile app (flutter_secure_storage)</li>
+                    </ol>
+                </div>
+
+                <div class="use-case">
+                    <h4>💬 Anonymous Chat Implementation</h4>
+                    <p>Privacy-focused chat system with ephemeral identities.</p>
+                    <ol style="margin-left: 20px;">
+                        <li>Create anonymous handle → Get ephemeral token (24-hour expiry)</li>
+                        <li>Join channels using anonymous identity</li>
+                        <li>Messages appear from anonymous handle, not real identity</li>
+                        <li>System automatically cleans up expired identities</li>
+                    </ol>
+                </div>
+
+                <div class="use-case">
+                    <h4>🛡️ Content Moderation Flow</h4>
+                    <p>Automated and human moderation system for safe community.</p>
+                    <ol style="margin-left: 20px;">
+                        <li>User sends message → Webhook triggers keyword scanning</li>
+                        <li>High severity → Message deleted, crisis resources sent</li>
+                        <li>Medium severity → Message flagged, added to moderation queue</li>
+                        <li>Moderators review flagged content and take action</li>
+                    </ol>
+                </div>
+
+                <div class="use-case">
+                    <h4>💡 Daily Tips Integration</h4>
+                    <p>Mental health content delivery system with automated publishing.</p>
+                    <ol style="margin-left: 20px;">
+                        <li>GitHub Actions publishes daily tips at 8:00 AM UTC</li>
+                        <li>Mobile app fetches latest tips on app launch</li>
+                        <li>Display tips in carousel or notification format</li>
+                        <li>Support pagination for tip history browsing</li>
+                    </ol>
+                </div>
+
+                <div class="use-case">
+                    <h4>🚨 Crisis Intervention System</h4>
+                    <p>Automated detection and response for high-risk content.</p>
+                    <ol style="margin-left: 20px;">
+                        <li>Keyword scanner detects crisis-related language</li>
+                        <li>System immediately sends crisis resources (988, 741741)</li>
+                        <li>Message escalated to human moderators</li>
+                        <li>Professional counselor notified for follow-up</li>
+                    </ol>
+                </div>
+            </section>
+        </div>
+
+        <footer>
+            <p>&copy; 2025 MindSupport API Documentation | Built with ❤️ for Mental Health Support</p>
+            <p style="margin-top: 10px; font-size: 0.9em; opacity: 0.8;">
+                🔒 Production Ready | ✅ All Endpoints Tested | 🛡️ Security Verified
+            </p>
+        </footer>
+    </div>
+</body>
+</html>
