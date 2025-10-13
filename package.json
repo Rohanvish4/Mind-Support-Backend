@@ -7,6 +7,7 @@
     "dev": "ts-node-dev --respawn --transpile-only src/index.ts",
     "build": "tsc",
     "start": "node dist/index.js",
+    "postinstall": "npm run build",
     "postbuild": "echo 'Build completed successfully. Checking dist directory...' && ls -la dist/",
     "prebuild": "rm -rf dist",
     "test": "jest --coverage",
@@ -54,6 +55,6 @@
     "ts-node-dev": "^2.0.0"
   },
   "engines": {
-    "node": ">=18.0.0"
+    "node": ">=20.0.0"
   }
 }
